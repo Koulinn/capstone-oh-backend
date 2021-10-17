@@ -11,6 +11,7 @@ const Person_Schema = new Schema(
         email: { type: String, unique: true, required: true },
         password: { type: String },
         googleId: { type: String },
+        refreshToken: { type: String },
         birth_date: { type: Date, required },
         age: { type: String, required },
         phone_primary: { type: Number },
