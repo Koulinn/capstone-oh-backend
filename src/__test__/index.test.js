@@ -14,7 +14,7 @@ describe("Testing the testing environment", () => {
     })
 })
 
-describe("Testing the server", () => {
+describe("Testing the user route", () => {
 
     beforeAll(done => {
         mongoose.connect(process.env.MONGO_TEST_URL)
@@ -25,7 +25,9 @@ describe("Testing the server", () => {
     })
 
 
-    it("should test that a POST /user/register is  creating a valid user", tests.registerNewUser)
+    
+
+    it("should test that a POST /user is  creating a valid user", tests.registerNewUser)
 
     afterAll(done => {
         mongoose.connection.dropDatabase()
