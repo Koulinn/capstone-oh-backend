@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose
 
-const Medical_Tests_Schema = new Schema(
+const MedicalTestsSchema = new Schema(
     {
         name: { type: String, required: true },
         cost: { type: String, required: true },
@@ -20,4 +20,4 @@ const Medical_Tests_Schema = new Schema(
     }
 )
 
-export default model('Medical_Tests', Medical_Tests_Schema)
+export default model('MedicalTests', MedicalTestsSchema)

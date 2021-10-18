@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose
 
-const Medical_Request_Schema = new Schema(
+const MedicalRequestSchema = new Schema(
     {
         userID: { type: Schema.Types.ObjectId, ref: "Users" },
         doctor_name: { type: String, required: true },
@@ -17,4 +17,4 @@ const Medical_Request_Schema = new Schema(
     }
 )
 
-export default model('Medical_Request', Medical_Request_Schema)
+export default model('MedicalRequest', MedicalRequestSchema)

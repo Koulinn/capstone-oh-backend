@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 
 const { Schema, model } = mongoose
 
-const User_Schema = new Schema(
+const UserSchema = new Schema(
     {
         name: { type: String, required: true },
         surname: { type: String, required: true },
@@ -12,12 +12,15 @@ const User_Schema = new Schema(
         password: { type: String },
         googleId: { type: String },
         refreshToken: { type: String },
-        birth_date: { type: Date, required },
-        age: { type: String, required },
+        birth_date: { type: Date, required: true },
+        age: {
+            age_years:{ type: String, required: true },
+            age_months:{ type: String, required: true },
+        },
         phone_primary: { type: Number },
         phone_secondary: { type: Number },
         health_data: {
-            healthcareplan:[{ type: Schema.Types.ObjectId, ref: "Healthcare_plan" }],
+            healthcarePlan:[{ type: Schema.Types.ObjectId, ref: "Healthcare_plan" }],
             weight: { type: Number },
             height: { type: Number },
             need_carer: { type: Boolean, default: false },
@@ -42,7 +45,7 @@ const User_Schema = new Schema(
 );
 
 
-userSchema.statics.checkCredentials = async function (email, password) {
+UserSchema.statics.checkCredentials = async function (email, password) {
     const user = await this.findOne({ email })
 
     if (user) {
@@ -56,7 +59,7 @@ userSchema.statics.checkCredentials = async function (email, password) {
     }
 }
 
-userSchema.pre("save", async function (next) {
+UserSchema.pre("save", async function (next) {
     this.avatar = `https://ui-avatars.com/api/?name=${this.name}`;
 
     if (this.isModified("password")) {
@@ -65,7 +68,7 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
-userSchema.pre('findOneAndUpdate', async function () {
+UserSchema.pre('findOneAndUpdate', async function () {
     const update = this.getUpdate();
     const { password: plainPwd } = update
 
@@ -76,7 +79,7 @@ userSchema.pre('findOneAndUpdate', async function () {
 });
 
 
-userSchema.methods.toJSON = function () {
+UserSchema.methods.toJSON = function () {
     const userDocument = this
     const userObject = userDocument.toObject()
 
@@ -88,4 +91,4 @@ userSchema.methods.toJSON = function () {
 
 
 
-export default model('Users', User_Schema)
+export default model('Users', UserSchema)

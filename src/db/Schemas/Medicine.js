@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose
 
-const Medicine_Schema = new Schema(
+const MedicineSchema = new Schema(
     {
         name: { type: String, required: true },
         care_requirements: { type: String, default: 'none' },
@@ -11,4 +11,4 @@ const Medicine_Schema = new Schema(
     }
 )
 
-export default model('Medicine', Medicine_Schema)
+export default model('Medicine', MedicineSchema)
