@@ -1,6 +1,6 @@
 import GoogleStrategy from 'passport-google-oauth20'
 import passport from 'passport'
-import User from '../../db/models/User.js'
+import PersonModel from '../../../db/Schemas/Person.js'
 import { JWTAuthenticate } from '../jwt-aux.js'
 
 
@@ -17,7 +17,7 @@ export const googleStrategy = new GoogleStrategy(
         try {
           console.log(profile)
     
-          const user = await User.findOne({ googleId: profile.id })
+          const user = await PersonModel.findOne({ googleId: profile.id })
     
           if (user) {
             const tokens = await JWTAuthenticate(user)
