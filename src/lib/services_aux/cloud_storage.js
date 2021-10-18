@@ -3,7 +3,7 @@ import multerStorageCloudinary from 'multer-storage-cloudinary'
 const {v2:cloudinary} = pkg
 const {CloudinaryStorage} = multerStorageCloudinary
 
-export const saveToPersonFiles = new CloudinaryStorage({
+export const saveUserFiles = new CloudinaryStorage({
     cloudinary,
     params:{
         folder: 'OneHealth/patient'

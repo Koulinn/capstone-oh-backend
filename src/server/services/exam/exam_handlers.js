@@ -1,4 +1,4 @@
-const deleteChat= async (req, res, next) => {
+const deleteExam = async (req, res, next) => {
   try {
  
   } catch (error) {

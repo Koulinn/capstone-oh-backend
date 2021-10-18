@@ -6,6 +6,7 @@ import passport from "passport"
 import { createServer } from 'http';
 import express  from "express"
 import examRouter from './services/exam/index.js'
+import userRouter from './services/user/index.js'
 import errorHandlers from "./server_aux/error_handlers.js"
 
 
@@ -21,6 +22,7 @@ server.use(cors(corsConfig))
 server.use(passport.initialize())
 
 server.use("/exam", examRouter)
+server.use("/userRouter", examRouter)
 
 
 

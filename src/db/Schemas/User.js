@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 
 const { Schema, model } = mongoose
 
-const Person_Schema = new Schema(
+const User_Schema = new Schema(
     {
         name: { type: String, required: true },
         surname: { type: String, required: true },
@@ -88,4 +88,4 @@ userSchema.methods.toJSON = function () {
 
 
 
-export default model('People', Person_Schema)
+export default model('Users', User_Schema)

@@ -1,7 +1,7 @@
-import { saveHospitalFiles, saveToPersonFiles } from "./cloud_storage.js"
+import { saveHospitalFiles, saveUserFiles } from "./cloud_storage.js"
 
 const servicesAux ={
-    saveToPersonFiles:saveToPersonFiles,
+    saveUserFiles:saveUserFiles,
     saveHospitalFiles:saveHospitalFiles
 }
 

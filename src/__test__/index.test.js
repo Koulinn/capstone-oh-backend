@@ -10,7 +10,7 @@ dotenv.config()
 
 describe("Testing the testing environment", () => {
     it("should test that true is true", () => {
-       expect(true).toBe(true);
+        expect(true).toBe(true);
     })
 })
 
@@ -21,26 +21,24 @@ describe("Testing the server", () => {
             .then(() => {
                 console.log("Connected to Atlas")
                 done()
-            }).catch(err=>console.log(err))
-    }) 
-    
-    it("should test that true is true", () => {
-        expect(true).toBe(true);
-     })
+            }).catch(err => console.log(err))
+    })
+
+
+    it("should test that a POST /user/register is  creating a valid user", tests.registerNewUser)
 
     afterAll(done => {
         mongoose.connection.dropDatabase()
-             .then(() => {
+            .then(() => {
                 console.log("DB dropped, removed testing DB")
-                
+
                 mongoose.connection.close().then(() => {
                     done()
                 })
             })
-        })
-    
-    // it("should test that a POST /user/register is  creating a valid user", tests.userCreation)
-    
+    })
+
+
 })
 
 
