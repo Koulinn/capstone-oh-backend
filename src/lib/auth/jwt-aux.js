@@ -4,12 +4,12 @@ import UserModel from '../../db/Schemas/User.js'
 
 export const generateTokens = async (user) => {
   const accessToken = await generateJWT({ _id: user._id })
-  const refreshToken = await generateRefreshedJWT({ _id: user._id })
+  const newRefreshToken = await generateRefreshedJWT({ _id: user._id })
 
-  user.refreshToken = refreshToken
+  user.refreshToken = newRefreshToken
 
   await user.save()
-  return { accessToken, refreshToken }
+  return { accessToken, newRefreshToken }
 
 }
 
@@ -46,18 +46,16 @@ const verifyRefreshJWT = token =>
     })
   )
 
-export const refreshTokens = async actualRefreshToken => {
+export const refreshToken = async currentRefreshToken => {
 
-  const decodedRefreshToken = await verifyRefreshJWT(actualRefreshToken)
+  const decodedRefreshToken = await verifyRefreshJWT(currentRefreshToken)
   const user = await UserModel.findById(decodedRefreshToken._id)
 
   if (!user) throw new Error("User not found!")
 
-  if (user.refreshToken === actualRefreshToken) {
-    const { accessToken, refreshToken } = await JWTAuthenticate(user)
-    user.refreshToken = refreshToken
-    user.save()
-    return { accessToken, refreshToken }
+  if (user.refreshToken === currentRefreshToken) {
+    const { accessToken, newRefreshToken } = await generateTokens(user)
+    return { accessToken, newRefreshToken }
   } else {
     throw createHttpError(401, "Refresh Token not valid!")
   }

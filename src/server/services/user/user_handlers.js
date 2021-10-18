@@ -1,7 +1,7 @@
 import UserModel from '../../../db/Schemas/User.js'
 import lib from '../../../lib/index.js'
 import createError from "http-errors";
-import { generateTokens } from '../../../lib/auth/jwt-aux.js';
+import { generateTokens, refreshToken } from '../../../lib/auth/jwt-aux.js';
 
 
 const { tools } = lib
@@ -25,7 +25,7 @@ const create = async (req, res, next) => {
 
 const getMe = async (req, res, next) => {
   try {
-    const {user} = req
+    const { user } = req
     if (user) {
       res.status(200).send({ success: true, user })
     } else {
@@ -57,7 +57,7 @@ const login = async (req, res, next) => {
 
     if (user) {
       const { accessToken, refreshToken } = await generateTokens(user)
-      res.status(200).send({ success:true, accessToken, refreshToken })
+      res.status(200).send({ success: true, accessToken, refreshToken })
     } else {
 
       next(createHttpError(401, "Credentials are not ok!"))
@@ -67,11 +67,23 @@ const login = async (req, res, next) => {
   }
 }
 
+const refreshLogin = async (req, res, next) => {
+  try {
+    const { validRefreshToken } = req.body
+    const { accessToken, newRefreshToken } = await refreshToken(validRefreshToken)
+
+    res.send({ success:true, accessToken, newRefreshToken })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const userHandlers = {
   create: create,
   getMe: getMe,
   updateMe: updateMe,
-  login: login
+  login: login,
+  refreshLogin: refreshLogin
 
 }
 
