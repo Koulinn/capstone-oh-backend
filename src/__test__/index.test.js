@@ -28,7 +28,9 @@ describe("Testing the user route", () => {
     
 
     it("should test that a POST /user is  creating a valid user", tests.registerValidUser)
-    it("should test POST error message and status for invalid user", tests.registerInvalidUser)
+    it("should test POST  /user error message and status for invalid user", tests.registerInvalidUser)
+    it("should test POST /login send correct tokens", tests.login)
+    it("should test GET /me send user data", tests.getMe)
 
     afterAll(done => {
         mongoose.connection.dropDatabase()
