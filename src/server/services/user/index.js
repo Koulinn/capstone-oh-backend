@@ -11,11 +11,14 @@ const {checkSchemaErrors} = tools
 
 const router = express.Router()
 
-const {create} = userHandlers
+const {create, getMe} = userHandlers
   
 router
   .route("/")
   .post(userValidator, checkSchemaErrors, create)
+router  
+  .route("/me")
+  .get(getMe)
 
 
 
