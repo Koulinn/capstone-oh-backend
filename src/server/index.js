@@ -22,7 +22,7 @@ server.use(cors(corsConfig))
 server.use(passport.initialize())
 
 server.use("/exam", examRouter)
-server.use("/userRouter", examRouter)
+server.use("/user", userRouter)
 
 
 
@@ -46,3 +46,7 @@ httpServer.listen(process.env.PORT, () => {
         console.log("🚀 Server is crashed due to ", error)
     )
 } 
+
+const testServer = server
+
+export default testServer
