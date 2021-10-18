@@ -12,10 +12,10 @@ const UserSchema = new Schema(
         password: { type: String },
         googleId: { type: String },
         refreshToken: { type: String },
-        birth_date: { type: Date, required: true },
+        birth_date: { type: Date },
         age: {
-            age_years:{ type: String, required: true },
-            age_months:{ type: String, required: true },
+            age_years:{ type: String },
+            age_months:{ type: String},
         },
         phone_primary: { type: Number },
         phone_secondary: { type: Number },

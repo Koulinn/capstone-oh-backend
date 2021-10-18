@@ -7,8 +7,8 @@ export const generateTokens = async (user) => {
   const newRefreshToken = await generateRefreshedJWT({ _id: user._id })
 
   user.refreshToken = newRefreshToken
-
   await user.save()
+
   return { accessToken, newRefreshToken }
 
 }
@@ -55,6 +55,9 @@ export const refreshToken = async currentRefreshToken => {
 
   if (user.refreshToken === currentRefreshToken) {
     const { accessToken, newRefreshToken } = await generateTokens(user)
+    user.refreshToken = newRefreshToken
+    user.save()
+
     return { accessToken, newRefreshToken }
   } else {
     throw createHttpError(401, "Refresh Token not valid!")

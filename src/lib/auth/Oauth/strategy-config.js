@@ -1,13 +1,13 @@
 import GoogleStrategy from 'passport-google-oauth20'
 import passport from 'passport'
 import UserModel from '../../../db/Schemas/User.js'
-import { JWTAuthenticate } from '../jwt-aux.js'
+import { generateTokens } from '../jwt-aux.js'
 
 
 const googleStrategyConfig = {
     clientID: process.env.GOOGLE_API_OAUTH_ID,
     clientSecret: process.env.GOOGLE_API_SECRET_KEY,
-    callbackURL: process.env.BE_URL + process.env.PORT + '/user/googleRedirect',
+    callbackURL: process.env.BE_URL + process.env.PORT + '/user/googleOauth',
 }
 
 export const googleStrategy = new GoogleStrategy(
@@ -15,31 +15,27 @@ export const googleStrategy = new GoogleStrategy(
 ,
     async (accessToken, refreshToken, profile, passportNext) => {
         try {
-          console.log(profile)
-    
           const user = await UserModel.findOne({ googleId: profile.id })
-    
           if (user) {
-            const tokens = await JWTAuthenticate(user)
+            const tokens = await generateTokens(user)
             passportNext(null, { tokens })
-
           } else {
             const newUser = {
-              name: profile.name.givenName,
-              surname: profile.name.familyName,
-              email: profile.emails[0].value,
-              role: "User",
+              name: profile._json.given_name,
+              surname: profile._json.family_name,
+              email: profile._json.email,
+              avatar: profile._json.picture,
               googleId: profile.id,
             }
     
-            const createdUser = new User(newUser)
+            const createdUser = new UserModel(newUser)
+            await createdUser.save()
             const savedUser = await createdUser.save()
-            const tokens = await JWTAuthenticate(savedUser)
+            const tokens = await generateTokens(savedUser)
     
-            passportNext(null, { user: savedUser, tokens })
+            passportNext(null, { tokens })
           }
         } catch (error) {
-          console.log(error)
           passportNext(error)
         }
       }

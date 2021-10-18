@@ -8,6 +8,7 @@ import express  from "express"
 import examRouter from './services/exam/index.js'
 import userRouter from './services/user/index.js'
 import errorHandlers from "./server_aux/error_handlers.js"
+import googleStrategy from "../lib/auth/Oauth/strategy-config.js"
 
 
 
@@ -17,7 +18,7 @@ const {corsConfig} = lib
 
 
 server.use(express.json())
-// passport.use("google", GoogleStrategy)
+passport.use("google", googleStrategy)
 server.use(cors(corsConfig))
 server.use(passport.initialize())
 
