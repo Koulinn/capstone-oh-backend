@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcrypt'
+
 
 const { Schema, model } = mongoose
 
 const Healthcare_Company = new Schema(
     {
-        name: { type: String, required: true },
+        name: { type: String, required: true, default: 'private' },
         phone_1: { type: String, required: true },
         phone_2: { type: String },
     },{
@@ -13,4 +13,4 @@ const Healthcare_Company = new Schema(
     }
 )
 
-export default model('Healthcare_Company', HealthcareCompanySchema)
+export default model('Healthcare_Company', Healthcare_Company)

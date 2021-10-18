@@ -88,4 +88,4 @@ userSchema.methods.toJSON = function () {
 
 
 
-export default model('People', PeopleSchema)
+export default model('People', Person_Schema)

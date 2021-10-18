@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcrypt'
 
 const { Schema, model } = mongoose
 
-const Medicine = new Schema(
+const Medicine_Schema = new Schema(
     {
         name: { type: String, required: true },
         care_requirements: { type: String, default: 'none' },
@@ -12,4 +11,4 @@ const Medicine = new Schema(
     }
 )
 
-export default model('Medicine', MedicineSchema)
+export default model('Medicine', Medicine_Schema)

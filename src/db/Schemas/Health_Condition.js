@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcrypt'
+
 
 const { Schema, model } = mongoose
 
 const Health_Condition = new Schema(
     {
-        name: { type: String, required: true },
-        care_requirements: { type: String, required: true }
+        name: { type: String, required: true, default: 'none' },
+        care_requirements: { type: String, required: true, default: 'none' }
     },{
         timestamps : true
     }
 )
 
-export default model('Health_Conditions', HealthConditionSchema)
+export default model('Health_Conditions', Health_Condition)

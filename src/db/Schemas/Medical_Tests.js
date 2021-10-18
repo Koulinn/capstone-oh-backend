@@ -1,23 +1,23 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcrypt'
+
 
 const { Schema, model } = mongoose
 
-const Medical_Tests = new Schema(
+const Medical_Tests_Schema = new Schema(
     {
         name: { type: String, required: true },
-        cost: { type: String },
-        price: { type: String },
+        cost: { type: String, required: true },
+        price: { type: String, required: true },
         need_sedation: { type: Boolean, default: false },
-        preparation: { type: String, default: 'none' },
-        patient_orientation: { type: String, default: 'none' },
+        preparation: { type: String, required: true, default: 'none' },
+        patient_orientation: { type: String, required: true, default: 'none' },
         is_completed: { type: Boolean, default: false },
         result: { type: String },
-        covered_by: { type: Schema.Types.ObjectId, ref: "Healthcare_Company" },
+        covered_by: [{ type: Schema.Types.ObjectId, ref: "Healthcare_Company" }],
 
     },{
         timestamps : true
     }
 )
 
-export default model('Medical_Tests', MedicalTestsSchema)
+export default model('Medical_Tests', Medical_Tests_Schema)
