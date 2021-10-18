@@ -12,7 +12,7 @@ const create = async (req, res, next) => {
 
     const newUser = new UserModel(req.body)
     const savedUser = await newUser.save({ new: true })
-    res.status(201).send({success: true, savedUser})
+    res.status(201).send({success: true, new_user: savedUser})
 
   } catch (error) {
     console.log(error)
