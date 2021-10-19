@@ -9,7 +9,7 @@ import { saveUserMedicalRequestFiles } from "../../../lib/services_aux/cloud_sto
 
 const { userValidator } = validations
 const { tools } = lib
-const { checkSchemaErrors } = tools
+const { checkSchemaErrors, isRegisteredUser, createPreDefinedUser } = tools
 
 
 const router = express.Router()
@@ -38,6 +38,11 @@ router
   .get(passport.authenticate("google"), OauthRedirect)
 router
   .route("/bookTests")
-  .post(JWTAuthMiddleware, multer({ storage: saveUserMedicalRequestFiles }).fields([{ name: 'medicalRequestsImgs', maxCount: 10 }]), bookMedicalRequest)
+  .post(
+    multer({ storage: saveUserMedicalRequestFiles }).fields([{ name: 'medicalRequestsImgs', maxCount: 10 }]),
+    isRegisteredUser,
+    createPreDefinedUser,
+    bookMedicalRequest
+  )
 
 export default router
