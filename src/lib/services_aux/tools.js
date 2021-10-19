@@ -46,11 +46,18 @@ const createUserMedTestsList = (req) => {
     return allMedicalRequests
 }
 
+const parseUserAvailability = async (req)=>{
+    const userAvailability = await JSON.parse(req.body.userAvailability)
+    console.log(userAvailability)
+    return userAvailability
+  }
+
 
 const tools = {
     getPreciseAge: getPreciseAge,
     checkSchemaErrors: checkSchemaErrors,
-    createUserMedTestsList: createUserMedTestsList
+    createUserMedTestsList: createUserMedTestsList,
+    parseUserAvailability:parseUserAvailability
 }
 
 export default tools
