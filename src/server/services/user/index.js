@@ -14,7 +14,7 @@ const { checkSchemaErrors, isRegisteredUser, createPreDefinedUser, checkExistent
 
 const router = express.Router()
 
-const { create, getMe, login, refreshLogin, OauthRedirect, bookMedicalRequest } = userHandlers
+const { create, getMe, updateMe, login, refreshLogin, OauthRedirect, bookMedicalRequest } = userHandlers
 
 router
   .route("/")
@@ -22,6 +22,7 @@ router
 router
   .route("/me")
   .get(JWTAuthMiddleware, getMe)
+  .put(JWTAuthMiddleware, updateMe)
 router
   .route("/login")
   .post(login)

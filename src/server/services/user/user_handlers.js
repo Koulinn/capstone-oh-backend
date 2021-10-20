@@ -41,7 +41,7 @@ const getMe = async (req, res, next) => {
 const updateMe = async (req, res, next) => {
   try {
     const userID = req.user._id
-    const user = await UserModel.findByIdAndUpdate(userID, { _id: userID, ...req.body }, { new: true })
+    const user = await UserModel.findByIdAndUpdate(userID, req.body , { new: true })
     if (user) {
       res.status(200).send({ success: true, user })
     } else {
