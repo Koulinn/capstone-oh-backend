@@ -9,7 +9,7 @@ import { saveUserMedicalRequestFiles, saveUserAvatar } from "../../../lib/servic
 
 const { userValidator } = validations
 const { tools } = lib
-const { checkSchemaErrors, isRegisteredUser, createPreDefinedUser, checkExistentEmail } = tools
+const { checkSchemaErrors, isLoggedUser, createPreDefinedUser, checkExistentEmail } = tools
 
 
 const router = express.Router()
@@ -45,7 +45,7 @@ router
   .route("/bookTest")
   .post(
     multer({ storage: saveUserMedicalRequestFiles }).fields([{ name: 'medicalRequestsImgs', maxCount: 10 }]),
-    isRegisteredUser,
+    isLoggedUser,
     checkExistentEmail,
     createPreDefinedUser,
     bookMedicalRequest

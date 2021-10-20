@@ -13,7 +13,6 @@ const getPreciseAge = (date) => {
 
 const checkSchemaErrors = (req, res, next) => {
     try {
-
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             next(createError(400, "Validation error", errors))
@@ -21,7 +20,6 @@ const checkSchemaErrors = (req, res, next) => {
             next()
         }
     } catch (error) {
-        console.log(error)
         next()
     }
 }
@@ -53,13 +51,14 @@ const parseJSON = async (req) => {
     return parsedJSON
 }
 
-const isRegisteredUser = async (req, res, next) => {
+const isLoggedUser = async (req, res, next) => {
     try {
         if (req.headers.authorization) {
             const token = req.headers.authorization.replace("Bearer ", "")
             const decodedToken = await verifyJWT(token)
             const user = await UserModel.findById(decodedToken._id)
             req.user = user
+            req.registeredUser = true
         }
 
         next()
@@ -118,7 +117,7 @@ const tools = {
     checkSchemaErrors: checkSchemaErrors,
     createUserMedTestsList: createUserMedTestsList,
     parseJSON: parseJSON,
-    isRegisteredUser: isRegisteredUser,
+    isLoggedUser: isLoggedUser,
     createPreDefinedUser: createPreDefinedUser,
     definedUserAvailability: definedUserAvailability,
     checkExistentEmail:checkExistentEmail
