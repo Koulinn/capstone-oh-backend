@@ -2,6 +2,7 @@ import UserModel from '../../../db/Schemas/User.js'
 import lib from '../../../lib/index.js'
 import createError from "http-errors";
 import { generateTokens, refreshToken } from '../../../lib/auth/jwt-aux.js';
+import Medical_Request from '../../../db/Schemas/Medical_Request.js';
 
 
 const { tools } = lib
@@ -15,7 +16,8 @@ const create = async (req, res, next) => {
 
     const newUser = new UserModel(req.body)
     const savedUser = await newUser.save({ new: true })
-    res.status(201).send({ success: true, new_user: savedUser })
+    const { accessToken, newRefreshToken } = await generateTokens(savedUser)
+    res.status(201).send({ success: true, accessToken, newRefreshToken })
 
   } catch (error) {
     console.log(error)
@@ -56,8 +58,8 @@ const login = async (req, res, next) => {
     const user = await UserModel.checkCredentials(email, password)
 
     if (user) {
-      const { accessToken, refreshToken } = await generateTokens(user)
-      res.status(200).send({ success: true, accessToken, refreshToken })
+      const { accessToken, newRefreshToken } = await generateTokens(user)
+      res.status(200).send({ success: true, accessToken, newRefreshToken })
     } else {
 
       next(createHttpError(401, "Credentials are not ok!"))
@@ -86,13 +88,42 @@ const OauthRedirect = async (req, res, next) => {
   }
 }
 
+
+const bookMedicalRequest = async (req, res, next) => {
+  try {
+    console.log('inside bookmedical request')
+    const userMedTestList = tools.createUserMedTestsList(req)
+    const availability  = await tools.definedUserAvailability(req.body.userAvailability)
+    const userID = req.user._id.toString()
+   
+    const medicalRequestObj = {
+      userID: userID,
+      user_tests_requested: userMedTestList,
+      user_availability: availability
+    }
+
+    const newUserRequest =  new Medical_Request(medicalRequestObj)
+    const savedRequest = await newUserRequest.save({ new: true })
+    console.log(savedRequest)
+    
+
+    res.status(201).send(savedRequest)
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+
+
 const userHandlers = {
   create: create,
   getMe: getMe,
   updateMe: updateMe,
   login: login,
   refreshLogin: refreshLogin,
-  OauthRedirect:OauthRedirect
+  OauthRedirect: OauthRedirect,
+  bookMedicalRequest: bookMedicalRequest,
 
 }
 
