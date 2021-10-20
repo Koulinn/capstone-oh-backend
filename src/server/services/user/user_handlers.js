@@ -3,6 +3,7 @@ import lib from '../../../lib/index.js'
 import createError from "http-errors";
 import { generateTokens, refreshToken } from '../../../lib/auth/jwt-aux.js';
 import Medical_Request from '../../../db/Schemas/Medical_Request.js';
+import { sendMedicalRequestEmail } from '../../../lib/email/index.js';
 
 
 const { tools } = lib
@@ -120,13 +121,16 @@ const bookMedicalRequest = async (req, res, next) => {
 
     const newUserRequest =  new Medical_Request(medicalRequestObj)
     const savedRequest = await newUserRequest.save({ new: true })
-    
 
+    req.registeredUser ? await sendMedicalRequestEmail(req.user, savedRequest ) : ''
+    
     res.status(201).send(savedRequest)
   } catch (error) {
     next(error)
   }
 }
+
+
 
 
 
