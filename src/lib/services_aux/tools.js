@@ -29,7 +29,7 @@ const checkSchemaErrors = (req, res, next) => {
 
 const createUserMedTestsList = (req) => {
     let allMedicalRequests = {
-        userTags: [],
+        userTestsTags: [],
         userFilesURL: [],
     }
     const tags = req.body.medicalRequestsTags
@@ -39,9 +39,9 @@ const createUserMedTestsList = (req) => {
     Array.isArray(requestsUrls) ? allMedicalRequests.userFilesURL = [...requestsUrls.map(request => request.path)] : ''
 
     //multiples tags
-    Array.isArray(tags) ? allMedicalRequests.userTags = [...tags] : ''
+    Array.isArray(tags) ? allMedicalRequests.userTestsTags = [...tags] : ''
     //single tags
-    tags && !Array.isArray(tags) ? allMedicalRequests.userTags = [tags] : ''
+    tags && !Array.isArray(tags) ? allMedicalRequests.userTestsTags = [tags] : ''
 
 
 
@@ -60,14 +60,30 @@ const isRegisteredUser = async (req, res, next) => {
             const decodedToken = await verifyJWT(token)
             const user = await UserModel.findById(decodedToken._id)
             req.user = user
-        } 
-        
+        }
+
         next()
-        
+
     } catch (error) {
         next(error)
     }
 
+}
+
+
+const checkExistentEmail = async (req, res, next) => {
+    try {
+        if (req.user) {
+            next()
+        } else {
+            const parsedUser = await parseJSON(req.body.preDefinedUser)
+            const existentUser = await UserModel.findOne({ email: parsedUser.email })
+            req.user = existentUser
+            next()
+        }
+    } catch (error) {
+        next(error)
+    }
 }
 
 const createPreDefinedUser = async (req, res, next) => {
@@ -87,14 +103,14 @@ const createPreDefinedUser = async (req, res, next) => {
 
 }
 
-const definedUserAvailability = async (req)=>{
+const definedUserAvailability = async (req) => {
     const userAvailability = await tools.parseJSON(req)
-    if(userAvailability[0].hasOwnProperty('ASAP')){
-      return userAvailability[0]
+    if (userAvailability[0].hasOwnProperty('ASAP')) {
+        return userAvailability[0]
     } else {
-      return userAvailability
+        return userAvailability
     }
-  }
+}
 
 
 const tools = {
@@ -104,7 +120,8 @@ const tools = {
     parseJSON: parseJSON,
     isRegisteredUser: isRegisteredUser,
     createPreDefinedUser: createPreDefinedUser,
-    definedUserAvailability:definedUserAvailability
+    definedUserAvailability: definedUserAvailability,
+    checkExistentEmail:checkExistentEmail
 }
 
 export default tools

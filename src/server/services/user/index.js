@@ -9,7 +9,7 @@ import { saveUserMedicalRequestFiles } from "../../../lib/services_aux/cloud_sto
 
 const { userValidator } = validations
 const { tools } = lib
-const { checkSchemaErrors, isRegisteredUser, createPreDefinedUser } = tools
+const { checkSchemaErrors, isRegisteredUser, createPreDefinedUser, checkExistentEmail } = tools
 
 
 const router = express.Router()
@@ -34,13 +34,14 @@ router
   .get(passport.authenticate('google', { scope: ["profile", 'email'] }))
 
 router
-  .route("/googleOauth")
+  .route("/googleOauthRedirect")
   .get(passport.authenticate("google"), OauthRedirect)
 router
-  .route("/bookTests")
+  .route("/bookTest")
   .post(
     multer({ storage: saveUserMedicalRequestFiles }).fields([{ name: 'medicalRequestsImgs', maxCount: 10 }]),
     isRegisteredUser,
+    checkExistentEmail,
     createPreDefinedUser,
     bookMedicalRequest
   )
