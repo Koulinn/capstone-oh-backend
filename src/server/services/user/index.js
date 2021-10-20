@@ -5,7 +5,7 @@ import lib from '../../../lib/index.js'
 import validations from "./user-validations.js"
 import JWTAuthMiddleware from "../../../lib/auth/jwt-middle.js"
 import passport from "passport"
-import { saveUserMedicalRequestFiles } from "../../../lib/services_aux/cloud_storage.js"
+import { saveUserMedicalRequestFiles, saveUserAvatar } from "../../../lib/services_aux/cloud_storage.js"
 
 const { userValidator } = validations
 const { tools } = lib
@@ -14,7 +14,7 @@ const { checkSchemaErrors, isRegisteredUser, createPreDefinedUser, checkExistent
 
 const router = express.Router()
 
-const { create, getMe, updateMe, login, refreshLogin, OauthRedirect, bookMedicalRequest } = userHandlers
+const { create, getMe, updateMe, login, refreshLogin, OauthRedirect, bookMedicalRequest, uploadAvatar } = userHandlers
 
 router
   .route("/")
@@ -23,6 +23,10 @@ router
   .route("/me")
   .get(JWTAuthMiddleware, getMe)
   .put(JWTAuthMiddleware, updateMe)
+router
+  .route("/me/uploadAvatar")
+  .put(JWTAuthMiddleware, multer({ storage: saveUserAvatar }).single('avatar'), uploadAvatar)
+
 router
   .route("/login")
   .post(login)

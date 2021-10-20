@@ -51,6 +51,23 @@ const updateMe = async (req, res, next) => {
     next(error)
   }
 }
+const uploadAvatar = async (req, res, next) => {
+  try {
+    const avatarUrl = req.file.path
+    console.log(avatarUrl)
+    const userID = req.user._id
+    const user = await UserModel.findByIdAndUpdate(userID, {avatar: avatarUrl}, { new: true })
+    if (user) {
+      res.status(200).send({ success: true, user })
+    } else {
+      res.createError(404, 'User not found')
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+
 
 const login = async (req, res, next) => {
   try {
@@ -91,7 +108,6 @@ const OauthRedirect = async (req, res, next) => {
 
 const bookMedicalRequest = async (req, res, next) => {
   try {
-    console.log('inside bookmedical request')
     const userMedTestList = tools.createUserMedTestsList(req)
     const availability  = await tools.definedUserAvailability(req.body.userAvailability)
     const userID = req.user._id.toString()
@@ -104,7 +120,6 @@ const bookMedicalRequest = async (req, res, next) => {
 
     const newUserRequest =  new Medical_Request(medicalRequestObj)
     const savedRequest = await newUserRequest.save({ new: true })
-    console.log(savedRequest)
     
 
     res.status(201).send(savedRequest)
@@ -120,6 +135,7 @@ const userHandlers = {
   create: create,
   getMe: getMe,
   updateMe: updateMe,
+  uploadAvatar:uploadAvatar,
   login: login,
   refreshLogin: refreshLogin,
   OauthRedirect: OauthRedirect,
