@@ -5,8 +5,8 @@ import connectToDB from '../DB/conn/index.js'
 import passport from "passport"
 import { createServer } from 'http';
 import express  from "express"
-import examRouter from './services/exam/index.js'
 import userRouter from './services/user/index.js'
+import hospitalRouter from './services/hospital/index.js'
 import errorHandlers from "./server_aux/error_handlers.js"
 import googleStrategy from "../lib/auth/Oauth/strategy-config.js"
 
@@ -22,8 +22,8 @@ passport.use("google", googleStrategy)
 server.use(cors(corsConfig))
 server.use(passport.initialize())
 
-server.use("/exam", examRouter)
 server.use("/user", userRouter)
+server.use("/hospital", hospitalRouter)
 
 
 
