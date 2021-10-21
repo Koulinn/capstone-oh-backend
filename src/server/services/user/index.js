@@ -14,7 +14,8 @@ const { checkSchemaErrors, isLoggedUser, createPreDefinedUser, checkExistentEmai
 
 const router = express.Router()
 
-const { create, getMe, updateMe, login, refreshLogin, OauthRedirect, bookMedicalRequest, uploadAvatar } = userHandlers
+const { create, getMe, updateMe, login, refreshLogin, 
+  OauthRedirect, bookMedicalRequest, uploadAvatar, searchResults, getMyResults } = userHandlers
 
 router
   .route("/")
@@ -23,6 +24,14 @@ router
   .route("/me")
   .get(JWTAuthMiddleware, getMe)
   .put(JWTAuthMiddleware, updateMe)
+  router
+  .route("/me/results")
+  .get(JWTAuthMiddleware, getMyResults)
+
+router
+  .route("/me/searchResults")
+  .get(JWTAuthMiddleware, searchResults)
+
 router
   .route("/me/uploadAvatar")
   .put(JWTAuthMiddleware, multer({ storage: saveUserAvatar }).single('avatar'), uploadAvatar)
