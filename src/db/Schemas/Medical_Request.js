@@ -9,11 +9,11 @@ const MedicalRequestSchema = new Schema(
         userID: { type: Schema.Types.ObjectId, ref: "Users" },
         doctor_name: { type: String },
         doctor_professional_register_ID: { type: String },
-        //user will send files or tests names, often misspelling 
         user_tests_requested: { type: Schema.Types.Mixed, default: 'Contact user' },
-        //medical facility will have to select the tests
-        confirmed_tests_requested: [{ type: Schema.Types.ObjectId, ref: "Medical_tests" }],
-        user_availability: [{type: Schema.Types.Mixed, default: 'ASAP' }],
+        confirmed_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalTests" }],
+        tests_results: [{ type: Schema.Types.Mixed }],
+        user_availability: [{type: Schema.Types.Mixed, default: 'To confirm' }],
+        all_tests_completed: { type: Boolean, default: false},
         lab_date_booked: { type: Date},
         is_user_confirmed: { type: Boolean, default: false}
     },{

@@ -6,15 +6,12 @@ const { Schema, model } = mongoose
 const MedicalTestsSchema = new Schema(
     {
         name: { type: String, required: true },
-        cost: { type: String, required: true },
-        price: { type: String, required: true },
+        cost: { type: String },
+        price: { type: String },
         need_sedation: { type: Boolean, default: false },
         preparation: { type: String, required: true, default: 'none' },
         patient_orientation: { type: String, required: true, default: 'none' },
-        is_completed: { type: Boolean, default: false },
-        result: { type: String },
-        covered_by: [{ type: Schema.Types.ObjectId, ref: "Healthcare_Company" }],
-
+        covered_by: [{ type: Schema.Types.ObjectId, ref: "HealthcareCompany" }],
     },{
         timestamps : true
     }

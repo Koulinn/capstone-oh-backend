@@ -5,7 +5,7 @@ const { Schema, model } = mongoose
 
 const HealthcareCompany = new Schema(
     {
-        name: { type: String, required: true, default: 'private' },
+        name: { type: String, required: true },
         phone_1: { type: String, required: true },
         phone_2: { type: String },
     },{

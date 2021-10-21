@@ -17,17 +17,17 @@ const UserSchema = new Schema(
             age_years:{ type: String },
             age_months:{ type: String},
         },
-        phone_primary: { type: Number },
-        phone_secondary: { type: Number },
+        phone_primary: { type: String, required: true },
+        phone_secondary: { type: String },
         health_data: {
-            healthcarePlan:[{ type: Schema.Types.ObjectId, ref: "Healthcare_plan" }],
+            healthcarePlan:[{ type: Schema.Types.ObjectId, ref: "HealthcareCompany"}],
             weight: { type: Number },
             height: { type: Number },
             need_carer: { type: Boolean, default: false },
             take_regular_medicine: { type: Boolean, default: false },
             patient_personal_information: { type: String },
             medicine_list: [{ type: Schema.Types.ObjectId, ref: "Medicine" }],
-            health_condition: [{ type: Schema.Types.ObjectId, ref: "Health_condition" }],
+            health_condition: [{ type: Schema.Types.ObjectId, ref: "HealthConditions" }],
 
         },
         current_address: {
@@ -37,9 +37,7 @@ const UserSchema = new Schema(
             post_code: { type: String },
             city: { type: String }
         },
-        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "Medical_request" }],
-        medical_tests_result: [{ type: Schema.Types.ObjectId, ref: "Medical_request" }],
-
+        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequest" }],
     },
     { timestamps: true }
 );
