@@ -1,5 +1,5 @@
 import { checkSchema, validationResult } from "express-validator";
-import createError from "http-errors";
+
 
 const userValidationSchema = {
     "name": {
@@ -25,6 +25,12 @@ const userValidationSchema = {
         isLength: {
             errorMessage: 'Password should be at least 7 chars long',
             options: { min: 7 },
+        },
+    },
+    "phone_primary": {
+        in: ["body"],
+        isLength: {
+            errorMessage: 'phone_primary must be a string',
         },
     },
     "birth_date": {
