@@ -2,4 +2,4 @@
 .env
 notes
 src/lib/email/pdfs
-tests.js
+tests.html
