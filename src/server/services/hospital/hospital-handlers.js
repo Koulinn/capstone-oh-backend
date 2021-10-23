@@ -1,5 +1,6 @@
 import MedicalTestsModel from "../../../db/Schemas/Medical_Tests.js"
 import MedicalRequestModel from "../../../db/Schemas/Medical_Request.js"
+import AssistantModel from "../../../db/Schemas/Assistant.js"
 
 
 
@@ -40,10 +41,37 @@ const confirmUserTests = async (req, res, next) => {
     }
   }
 
+
+  const addAssistant = async (req, res, next) => {
+    try {
+     
+      const newAssistant = new AssistantModel(req.body)
+      const savedAssistant = await newAssistant.save({ new: true })
+      res.status(201).send({ success: true, savedAssistant })
+  
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+  const getAssistant = async (req, res, next) => {
+    try {
+     
+      const assistants = await AssistantModel.find()
+      res.status(201).send({ success: true, assistants })
+  
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
 const hospital = {
     addNewTest:addNewTest,
     confirmUserTests:confirmUserTests,
-    addResult:addResult
+    addResult:addResult,
+    addAssistant:addAssistant,
+    getAssistant:getAssistant
 }
 
 export default hospital
