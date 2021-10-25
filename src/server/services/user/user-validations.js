@@ -32,13 +32,8 @@ const userValidationSchema = {
         isLength: {
             errorMessage: 'phone_primary must be a string',
         },
-    },
-    "birth_date": {
-        in: ["body"],
-        isString: {
-            errorMessage: "birth_date must be string and the formate should follow mm-dd-yyyy"
-        }
     }
+   
 }
 
 const userValidator = checkSchema(userValidationSchema)
