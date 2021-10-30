@@ -2,14 +2,15 @@ import express from "express"
 import multer from 'multer'
 import hospital from './hospital-handlers.js'
 
-const{ addNewTest, confirmUserTests, addResult, addAssistant, getAssistant} = hospital
+const{ addNewTest, confirmUserTests, addResult, addAssistant, getAssistant, searchTest} = hospital
 
 const router = express.Router()
   
 router
   .route("/")
   .post(addNewTest)
-router
+  .get(searchTest)
+  router
   .route("/addResult/:requestID")
   .put(addResult)
 router
