@@ -11,6 +11,7 @@ const JWTAuthMiddleware = async (req, res, next) => {
       const token = req.headers.authorization.replace("Bearer ", "")
       const decodedToken = await verifyJWT(token)
       const user = await UserModel.findById(decodedToken._id)
+      .populate('medical_tests_requested')
 
       if (user) {
         req.user = user
@@ -19,6 +20,7 @@ const JWTAuthMiddleware = async (req, res, next) => {
         next(createHttpError(404, "User not found!"))
       }
     } catch (error) {
+      console.log(error)
       next(createHttpError(401, "Token not valid!"))
     }
   }
