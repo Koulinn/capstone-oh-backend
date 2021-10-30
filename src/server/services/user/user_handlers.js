@@ -105,7 +105,6 @@ const refreshLogin = async (req, res, next) => {
   try {
     const  currentRefreshToken  = req.body.refreshToken
     const { accessToken, refreshToken } = await newRefreshToken(currentRefreshToken)
-
     res.send({ success: true, accessToken, refreshToken })
   } catch (error) {
     next(error)
@@ -114,7 +113,7 @@ const refreshLogin = async (req, res, next) => {
 
 const OauthRedirect = async (req, res, next) => {
   try {
-    res.redirect(`http://localhost:3000/dashboard?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.newRefreshToken}`)
+    res.redirect(`http://localhost:3000/dashboard?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
   } catch (error) {
     next(error)
   }

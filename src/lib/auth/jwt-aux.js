@@ -24,7 +24,7 @@ const generateRefreshedJWT = (payload) =>
 
 const generateJWT = payload =>
   new Promise((resolve, reject) =>
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "5d" }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15s" }, (err, token) => {
       if (err) reject(err)
       resolve(token)
     })
@@ -56,7 +56,8 @@ export const newRefreshToken = async currentRefreshToken => {
 
   if (user.refreshToken === currentRefreshToken) {
     const { accessToken, refreshToken } = await generateTokens(user)
-   
+    user.refreshToken = refreshToken
+    await user.save()
     return { accessToken, refreshToken }
   } else {
     throw createHttpError(401, "Refresh Token not valid!")
