@@ -19,8 +19,8 @@ const create = async (req, res, next) => {
 
     const newUser = new UserModel(req.body)
     const savedUser = await newUser.save({ new: true })
-    const { accessToken, newRefreshToken } = await generateTokens(savedUser)
-    res.status(201).send({ success: true, accessToken, newRefreshToken })
+    const { accessToken, refreshToken } = await generateTokens(savedUser)
+    res.status(201).send({ success: true, accessToken, refreshToken })
 
   } catch (error) {
     next(error)
