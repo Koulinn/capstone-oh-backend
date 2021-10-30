@@ -2,7 +2,7 @@ import UserModel from '../../../db/Schemas/User.js'
 import Medical_Request from '../../../db/Schemas/Medical_Request.js';
 import createError from "http-errors";
 import lib from '../../../lib/index.js'
-import { generateTokens, refreshToken } from '../../../lib/auth/jwt-aux.js';
+import { generateTokens, newRefreshToken } from '../../../lib/auth/jwt-aux.js';
 import { sendMedicalRequestEmail } from '../../../lib/email/index.js';
 import queryToMongo from 'query-to-mongo'
 
@@ -12,10 +12,10 @@ const { tools } = lib
 
 const create = async (req, res, next) => {
   try {
-    const { years, months } = tools.getPreciseAge(req.body.birth_date)
-    req.body.age = {}
-    req.body.age.age_years = years
-    req.body.age.age_months = months
+    // const { years, months } = tools.getPreciseAge(req.body.birth_date)
+    // req.body.age = {}
+    // req.body.age.age_years = years
+    // req.body.age.age_months = months
 
     const newUser = new UserModel(req.body)
     const savedUser = await newUser.save({ new: true })
@@ -23,7 +23,6 @@ const create = async (req, res, next) => {
     res.status(201).send({ success: true, accessToken, newRefreshToken })
 
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }
@@ -104,10 +103,10 @@ const login = async (req, res, next) => {
 
 const refreshLogin = async (req, res, next) => {
   try {
-    const { validRefreshToken } = req.body
-    const { accessToken, newRefreshToken } = await refreshToken(validRefreshToken)
+    const  currentRefreshToken  = req.body.refreshToken
+    const { accessToken, refreshToken } = await newRefreshToken(currentRefreshToken)
 
-    res.send({ success: true, accessToken, newRefreshToken })
+    res.send({ success: true, accessToken, refreshToken })
   } catch (error) {
     next(error)
   }
@@ -115,7 +114,7 @@ const refreshLogin = async (req, res, next) => {
 
 const OauthRedirect = async (req, res, next) => {
   try {
-    res.redirect(`http://localhost:3000?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.newRefreshToken}`)
+    res.redirect(`http://localhost:3000/dashboard?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.newRefreshToken}`)
   } catch (error) {
     next(error)
   }
@@ -124,14 +123,16 @@ const OauthRedirect = async (req, res, next) => {
 
 const bookMedicalRequest = async (req, res, next) => {
   try {
-    const userMedTestList = tools.createUserMedTestsList(req)
+    const userMedTestList = await tools.createUserMedTestsList(req)
     const availability = await tools.definedUserAvailability(req.body.userAvailability)
+    const facility = await tools.convertFacility(req.body.facility)
     const userID = req.user._id.toString()
 
     const medicalRequestObj = {
       userID: userID,
       user_tests_requested: userMedTestList,
-      user_availability: availability
+      user_availability: availability,
+      facility:facility
     }
 
     const newUserRequest = new Medical_Request(medicalRequestObj)
