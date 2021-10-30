@@ -54,9 +54,7 @@ router
   .route("/bookTest")
   .post(
     multer({ storage: saveUserMedicalRequestFiles }).fields([{ name: 'medicalRequestsImgs', maxCount: 10 }]),
-    isLoggedUser,
-    checkExistentEmail,
-    createPreDefinedUser,
+    JWTAuthMiddleware,
     bookMedicalRequest
   )
 
