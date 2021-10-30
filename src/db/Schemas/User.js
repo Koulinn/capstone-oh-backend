@@ -37,7 +37,7 @@ const UserSchema = new Schema(
             post_code: { type: String },
             city: { type: String }
         },
-        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequest" }],
+        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequests" }],
     },
     { timestamps: true }
 );
