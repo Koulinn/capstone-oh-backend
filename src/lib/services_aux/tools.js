@@ -25,22 +25,21 @@ const checkSchemaErrors = (req, res, next) => {
 }
 
 
-const createUserMedTestsList = (req) => {
+const createUserMedTestsList = async(req) => {
     let allMedicalRequests = {
         userTestsTags: [],
         userFilesURL: [],
     }
-    const tags = req.body.medicalRequestsTags
+    const tags = await JSON.parse(req.body.medicalRequestsTags)
     const requestsUrls = req.files.medicalRequestsImgs
 
     //for images/files
-    Array.isArray(requestsUrls) ? allMedicalRequests.userFilesURL = [...requestsUrls.map(request => request.path)] : ''
+    Array.isArray(requestsUrls) ? allMedicalRequests.userFilesURL = [...requestsUrls.map(request => request.path)] : allMedicalRequests.userFilesURL = []
 
     //multiples tags
     Array.isArray(tags) ? allMedicalRequests.userTestsTags = [...tags] : ''
     //single tags
-    tags && !Array.isArray(tags) ? allMedicalRequests.userTestsTags = [tags] : ''
-
+    tags.length === 0 ? allMedicalRequests.userTestsTags = [] : ''
 
 
     return allMedicalRequests
@@ -111,6 +110,15 @@ const definedUserAvailability = async (req) => {
     }
 }
 
+const convertFacility = async (facility)=>{
+    try {
+        return await parseJSON(facility)
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
 
 const tools = {
     getPreciseAge: getPreciseAge,
@@ -120,7 +128,8 @@ const tools = {
     isLoggedUser: isLoggedUser,
     createPreDefinedUser: createPreDefinedUser,
     definedUserAvailability: definedUserAvailability,
-    checkExistentEmail:checkExistentEmail
+    checkExistentEmail:checkExistentEmail,
+    convertFacility:convertFacility
 }
 
 export default tools
