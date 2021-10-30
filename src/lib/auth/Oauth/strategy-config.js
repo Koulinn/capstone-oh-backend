@@ -15,7 +15,7 @@ export const googleStrategy = new GoogleStrategy(
 ,
     async (accessToken, refreshToken, profile, passportNext) => {
         try {
-          const user = await UserModel.findOne({ googleId: profile.id })
+          const user = await UserModel.findOne({ email: profile._json.email })
           if (user) {
             const tokens = await generateTokens(user)
             passportNext(null, { tokens })
@@ -26,6 +26,7 @@ export const googleStrategy = new GoogleStrategy(
               email: profile._json.email,
               avatar: profile._json.picture,
               googleId: profile.id,
+              phone_primary: '7895144568'
             }
     
             const createdUser = new UserModel(newUser)

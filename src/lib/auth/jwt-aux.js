@@ -4,18 +4,19 @@ import UserModel from '../../db/Schemas/User.js'
 
 export const generateTokens = async (user) => {
   const accessToken = await generateJWT({ _id: user._id })
-  const newRefreshToken = await generateRefreshedJWT({ _id: user._id })
+  const refreshToken = await generateRefreshedJWT({ _id: user._id })
+  console.log(refreshToken, 'from generateTokens')
 
-  user.refreshToken = newRefreshToken
+  user.refreshToken = refreshToken
   await user.save()
 
-  return { accessToken, newRefreshToken }
+  return { accessToken, refreshToken }
 
 }
 
 const generateRefreshedJWT = (payload) =>
   new Promise((resolve, reject) =>
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" }, (err, token) => {
       if (err) reject(err)
       resolve(token)
     })
@@ -23,7 +24,7 @@ const generateRefreshedJWT = (payload) =>
 
 const generateJWT = payload =>
   new Promise((resolve, reject) =>
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "5d" }, (err, token) => {
       if (err) reject(err)
       resolve(token)
     })
@@ -46,7 +47,7 @@ const verifyRefreshJWT = token =>
     })
   )
 
-export const refreshToken = async currentRefreshToken => {
+export const newRefreshToken = async currentRefreshToken => {
 
   const decodedRefreshToken = await verifyRefreshJWT(currentRefreshToken)
   const user = await UserModel.findById(decodedRefreshToken._id)
@@ -54,11 +55,9 @@ export const refreshToken = async currentRefreshToken => {
   if (!user) throw new Error("User not found!")
 
   if (user.refreshToken === currentRefreshToken) {
-    const { accessToken, newRefreshToken } = await generateTokens(user)
-    user.refreshToken = newRefreshToken
-    user.save()
-
-    return { accessToken, newRefreshToken }
+    const { accessToken, refreshToken } = await generateTokens(user)
+   
+    return { accessToken, refreshToken }
   } else {
     throw createHttpError(401, "Refresh Token not valid!")
   }
