@@ -48,7 +48,7 @@ router
   .get(passport.authenticate('google', { scope: ["profile", 'email'] }))
 
 router
-  .route("/googleOauthRedirect")
+  .route("/googleOauth")
   .get(passport.authenticate("google"), OauthRedirect)
 router
   .route("/bookTest")
