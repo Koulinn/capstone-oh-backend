@@ -12,6 +12,7 @@ const MedicalRequestSchema = new Schema(
         user_tests_requested: { type: Schema.Types.Mixed, default: 'Contact user' },
         confirmed_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalTests" }],
         tests_results: [{ type: Schema.Types.Mixed }],
+        facility:{type: Schema.Types.Mixed},
         user_availability: [{type: Schema.Types.Mixed, default: 'To confirm' }],
         all_tests_completed: { type: Boolean, default: false},
         lab_date_booked: { type: Date},
@@ -26,4 +27,4 @@ MedicalRequestSchema.pre("save", async function (next) {
     next();
 });
 
-export default model('MedicalRequest', MedicalRequestSchema)
+export default model('MedicalRequests', MedicalRequestSchema)
