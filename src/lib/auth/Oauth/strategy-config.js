@@ -24,7 +24,7 @@ export const googleStrategy = new GoogleStrategy(
               name: profile._json.given_name,
               surname: profile._json.family_name,
               email: profile._json.email,
-              avatar: profile._json.picture,
+              avatar: profile._json.picture || ('https://ui-avatars.com/api/?name=' + profile._json.given_name) ,
               googleId: profile.id,
               phone_primary: '7895144568'
             }

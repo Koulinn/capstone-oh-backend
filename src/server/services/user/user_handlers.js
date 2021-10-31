@@ -69,9 +69,8 @@ const updateMe = async (req, res, next) => {
 const uploadAvatar = async (req, res, next) => {
   try {
     const avatarUrl = req.file.path
-    console.log(avatarUrl)
     const userID = req.user._id
-    const user = await UserModel.findByIdAndUpdate(userID, { avatar: avatarUrl }, { new: true })
+    const user = await UserModel.findByIdAndUpdate(userID, { avatar: avatarUrl }, { projection: {avatar: 1, _id: 0}, new: true })
     if (user) {
       res.status(200).send({ success: true, user })
     } else {

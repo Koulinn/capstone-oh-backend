@@ -58,8 +58,7 @@ UserSchema.statics.checkCredentials = async function (email, password) {
 }
 
 UserSchema.pre("save", async function (next) {
-    this.avatar = `https://ui-avatars.com/api/?name=${this.name}`;
-
+    
     if (this.isModified("password")) {
         this.password = await bcrypt.hash(this.password, 12)
     }
