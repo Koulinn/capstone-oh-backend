@@ -1,6 +1,7 @@
 import UserModel from '../../db/Schemas/User.js'
 import RoomModel from '../../db/Schemas/Rooms.js'
 import AssistantModel from '../../db/Schemas/Assistant.js'
+import MessageModel from '../../db/Schemas/Message.js'
 
 
 const newUserConnection = async (payload, waitingList, socketID) => {
@@ -38,17 +39,30 @@ const saveRoom = async(userID, assistantID)=>{
 const isExistentRoom = async(userID, assistantID)=>{
     const existentRoom = await RoomModel.findOne({UserID:userID, AssistantID:assistantID })
     if(existentRoom){
-        return existentRoom._id
+        return existentRoom._id.toString()
     } else{
         return false
     }
+}
+
+const saveMessage = async (message, roomID) => {
+    const aux ={
+        ...message,
+        roomID
+    }
+    const newMessage = new MessageModel(aux)
+    const savedMessage = newMessage.save()
+    RoomModel.findByIdAndUpdate(roomID, {$push:{chatHistory:savedMessage._id}})
+    console.log(savedMessage, '<>,<<<<<<')
+    return savedMessage
 }
 
 const socketHandlers = {
     newUserConnection: newUserConnection,
     dcUser: dcUser,
     saveRoom:saveRoom,
-    isExistentRoom:isExistentRoom
+    isExistentRoom:isExistentRoom,
+    saveMessage:saveMessage
 }
 
 export default socketHandlers

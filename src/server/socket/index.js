@@ -4,7 +4,7 @@ import socketHandlers from './socket-handlers.js'
 
 
 
-const { newUserConnection, dcUser, saveRoom, isExistentRoom } = socketHandlers
+const { newUserConnection, dcUser, saveRoom, isExistentRoom, saveMessage } = socketHandlers
 
 let waitingUsers = []
 let assistants = []
@@ -49,13 +49,14 @@ export const connectSocket = (server) => {
                 waitingUsers = waitingUsers.filter(u => u._id !== userID)
                 const roomID = await isExistentRoom(userID, assistant._id)
                 if (roomID) {
+                    console.log(roomID)
                     socket.join(roomID)
-                    socket.emit("onUserChat", user)
+                    socket.emit("onUserChat", {user, roomID})
                     socket.to(userID).emit('joinChat', roomID)
                 } else {
                     const roomID = await saveRoom(userID, assistant._id)
                     socket.join(roomID)
-                    socket.emit("onUserChat", user)
+                    socket.emit("onUserChat", {user, roomID})
                     socket.to(userID).emit('joinChat', roomID)
                 }
             })
@@ -64,11 +65,17 @@ export const connectSocket = (server) => {
                 socket.join(payload)
             })
             socket.on('newMessage', async (payload) => {
-                console.log('inside new message >>>room ID', payload.roomID)
+                console.log('=============== new Message ===============')
                 const { roomID } = payload
+                const { message } = payload
+                const newMessage = await saveMessage(message, roomID)
+                
+                console.log('-------------------------------------')
+              
                 // save message to the DB
                 // message can have multiples files
-                socket.to(roomID).emit('recipientMessage', payload)
+                socket.emit('recipientMessage', newMessage)
+                socket.to(roomID).emit('recipientMessage', newMessage)
                 // EMIT to the assistant the user message
                 // EMIT to the user that the assistant has received a message
             })
