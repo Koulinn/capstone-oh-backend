@@ -57,6 +57,7 @@ const confirmUserTests = async (req, res, next) => {
 
 const addAssistant = async (req, res, next) => {
   try {
+    req.body.avatar = 'https://ui-avatars.com/api/?name=' + req.body.name
 
     const newAssistant = new AssistantModel(req.body)
     const savedAssistant = await newAssistant.save({ new: true })
