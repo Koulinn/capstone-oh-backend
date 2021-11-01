@@ -3,7 +3,8 @@ import { httpServer } from '../index.js'
 import socketHandlers from './socket-handlers.js'
 
 
-const {newUserConnection, dcUser} = socketHandlers
+
+const { newUserConnection, dcUser, saveRoom, isExistentRoom } = socketHandlers
 
 let waitingUsers = []
 let assistants = []
@@ -15,38 +16,56 @@ export const connectSocket = (server) => {
         const io = new Server(httpServer, { allowEIO3: true })
 
         io.on('connection', socket => {
-            console.log('Coon established')
-            console.log(waitingUsers.length, 'from forceDC')
+            console.log(waitingUsers.length, ' number of waiting users from forceDC')
             socket.on('newUser', async (payload) => {
-                const user = payload.user
+
+
                 await newUserConnection(payload, waitingUsers, socket.id)
-                socket.emit('newUserOn', user)
-                socket.join(user._id)            
+                assistants.forEach(a => {
+                    console.log(assistants.length, 'Number of online assistants')
+                    socket.to(a.assistant._id).emit('waitingUsers', waitingUsers)
+                })
+
+                socket.join(payload._id)
             })
             socket.on('newAssistant', async (payload) => {
-                const newAssistant ={
-                    assistant: payload.assistant,
+                const newAssistant = {
+                    assistant: payload,
                     socketID: socket.id
                 }
-                assistants.push(newAssistant)
+                const isAssistantOn = assistants.find(a => a.assistant._id === payload._id)
+                if (isAssistantOn) {
+
+                } else {
+                    assistants.push(newAssistant)
+                }
+
+                socket.join(payload._id)
                 socket.emit('waitingUsers', waitingUsers)
             })
             socket.on('openRoomWithUser', async (payload) => {
-                const assistant = payload
-                const {user} = waitingUsers.shift()
-                console.log(payload, 'user id from openroom')
-                socket.join(user._id)
-                socket.emit("onUserChat", user)
-                socket.to(user._id).emit('onChat',assistant)
-
-                // save room in DB
-                
-                // open EMIT notification to the user and assistant that hey are in the same room
-                // User is sent from waiting interface to the chat interface
+                const userID = payload.user._id
+                const { user, assistant } = payload
+                waitingUsers = waitingUsers.filter(u => u._id !== userID)
+                const roomID = await isExistentRoom(userID, assistant._id)
+                if (roomID) {
+                    socket.join(roomID)
+                    socket.emit("onUserChat", user)
+                    socket.to(userID).emit('joinChat', roomID)
+                } else {
+                    const roomID = await saveRoom(userID, assistant._id)
+                    socket.join(roomID)
+                    socket.emit("onUserChat", user)
+                    socket.to(userID).emit('joinChat', roomID)
+                }
+            })
+            socket.on('joinSupportAssistant', payload=>{
+       
+                socket.join(payload)
             })
             socket.on('newMessage', async (payload) => {
                 console.log('inside new message >>>room ID', payload.roomID)
-                const {roomID} = payload
+                const { roomID } = payload
                 // save message to the DB
                 // message can have multiples files
                 socket.to(roomID).emit('recipientMessage', payload)
@@ -55,15 +74,15 @@ export const connectSocket = (server) => {
             })
 
             socket.on('forceUserDisconnect', () => {
-               dcUser(waitingUsers, socket) 
-               socket.emit('updateWaitingUser', waitingUsers)
-                console.log(waitingUsers.length, 'from forceDC')
+                dcUser(waitingUsers, socket)
+                socket.emit('updateWaitingUser', waitingUsers)
+                console.log(waitingUsers.length,  'number of waiting users after forceDC')
 
             })
             socket.on("disconnect", () => {
-                dcUser(waitingUsers, socket) 
+                dcUser(waitingUsers, socket)
                 socket.emit('updateWaitingUser', waitingUsers)
-                console.log(waitingUsers.length, 'from disconnect')
+                console.log(waitingUsers.length, 'number of user after disconnect')
             })
         })
     } catch (error) {
