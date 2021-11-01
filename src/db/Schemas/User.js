@@ -38,6 +38,7 @@ const UserSchema = new Schema(
             city: { type: String }
         },
         medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequests" }],
+        rooms: [{ type: Schema.Types.ObjectId, ref: "Rooms"}]
     },
     { timestamps: true }
 );
@@ -82,6 +83,7 @@ UserSchema.methods.toJSON = function () {
 
     delete userObject.password
     delete userObject.__v
+    delete userObject._id
 
     return userObject
 }
