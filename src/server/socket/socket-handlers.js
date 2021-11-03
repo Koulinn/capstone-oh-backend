@@ -29,7 +29,6 @@ const saveRoom = async(userID, assistantID)=>{
     }
     const newRoomModel = new RoomModel(newRoom)
     const savedRoom = await newRoomModel.save()
-    console.log(savedRoom._id)
   
     await UserModel.findByIdAndUpdate(userID, {$push:{rooms: savedRoom._id}})
     await AssistantModel.findByIdAndUpdate(assistantID, {$push:{rooms: savedRoom._id}})
@@ -39,7 +38,7 @@ const saveRoom = async(userID, assistantID)=>{
 const isExistentRoom = async(userID, assistantID)=>{
     const existentRoom = await RoomModel.findOne({UserID:userID, AssistantID:assistantID })
     if(existentRoom){
-        return existentRoom._id.toString()
+        return userID.toString()
     } else{
         return false
     }
@@ -51,9 +50,8 @@ const saveMessage = async (message, roomID) => {
         roomID
     }
     const newMessage = new MessageModel(aux)
-    const savedMessage = newMessage.save()
+    const savedMessage = await newMessage.save()
     RoomModel.findByIdAndUpdate(roomID, {$push:{chatHistory:savedMessage._id}})
-    console.log(savedMessage, '<>,<<<<<<')
     return savedMessage
 }
 

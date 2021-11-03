@@ -25,7 +25,6 @@ export const connectSocket = (server) => {
                     console.log(assistants.length, 'Number of online assistants')
                     socket.to(a.assistant._id).emit('waitingUsers', waitingUsers)
                 })
-                console.log(payload)
                 socket.join(payload._id)
             })
             socket.on('newAssistant', async (payload) => {
@@ -56,7 +55,7 @@ export const connectSocket = (server) => {
                 waitingUsers = waitingUsers.filter(u => u._id !== userID)
                 const roomID = await isExistentRoom(userID, assistant._id)
                 if (roomID) {
-                    console.log(roomID)
+            
                     socket.join(roomID)
                     socket.emit("onUserChat", {user, roomID})
                     socket.to(userID).emit('joinChat', roomID)
@@ -83,7 +82,7 @@ export const connectSocket = (server) => {
             })
 
             socket.on('forceUserDisconnect', () => {
-                // socket.emit('updateWaitingUser', waitingUsers)
+               
                 dcUser(waitingUsers, socket)
                 assistants.forEach(a => {
                     console.log(assistants.length, 'Number of online assistants')
@@ -98,7 +97,6 @@ export const connectSocket = (server) => {
                     console.log(assistants.length, 'Number of online assistants')
                     socket.to(a.assistant._id).emit('updateWaitingUser', waitingUsers)
                 })
-                // socket.emit('updateWaitingUser', waitingUsers)
                 console.log(waitingUsers.length, 'number of user after disconnect')
             })
         })
