@@ -16,6 +16,7 @@ const create = async (req, res, next) => {
     // req.body.age = {}
     // req.body.age.age_years = years
     // req.body.age.age_months = months
+    req.body.avatar = `https://ui-avatars.com/api/?name=${req.body.name}+${req.body.surname}`
 
     const newUser = new UserModel(req.body)
     const savedUser = await newUser.save({ new: true })
