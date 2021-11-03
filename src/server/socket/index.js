@@ -25,7 +25,7 @@ export const connectSocket = (server) => {
                     console.log(assistants.length, 'Number of online assistants')
                     socket.to(a.assistant._id).emit('waitingUsers', waitingUsers)
                 })
-
+                console.log(payload)
                 socket.join(payload._id)
             })
             socket.on('newAssistant', async (payload) => {
@@ -34,6 +34,13 @@ export const connectSocket = (server) => {
                     socketID: socket.id
                 }
                 const isAssistantOn = assistants.find(a => a.assistant._id === payload._id)
+                if(assistants.length >0){
+                    assistants.push(newAssistant)
+                    socket.join(payload._id)
+                    socket.emit('waitingUsers', waitingUsers)
+                    return
+                }
+
                 if (isAssistantOn) {
 
                 } else {
@@ -65,30 +72,33 @@ export const connectSocket = (server) => {
                 socket.join(payload)
             })
             socket.on('newMessage', async (payload) => {
-                console.log('=============== new Message ===============')
                 const { roomID } = payload
                 const { message } = payload
                 const newMessage = await saveMessage(message, roomID)
-                
-                console.log('-------------------------------------')
               
-                // save message to the DB
                 // message can have multiples files
                 socket.emit('recipientMessage', newMessage)
                 socket.to(roomID).emit('recipientMessage', newMessage)
-                // EMIT to the assistant the user message
-                // EMIT to the user that the assistant has received a message
+         
             })
 
             socket.on('forceUserDisconnect', () => {
+                // socket.emit('updateWaitingUser', waitingUsers)
                 dcUser(waitingUsers, socket)
-                socket.emit('updateWaitingUser', waitingUsers)
+                assistants.forEach(a => {
+                    console.log(assistants.length, 'Number of online assistants')
+                    socket.to(a.assistant._id).emit('updateWaitingUser', waitingUsers)
+                })
                 console.log(waitingUsers.length,  'number of waiting users after forceDC')
 
             })
             socket.on("disconnect", () => {
                 dcUser(waitingUsers, socket)
-                socket.emit('updateWaitingUser', waitingUsers)
+                assistants.forEach(a => {
+                    console.log(assistants.length, 'Number of online assistants')
+                    socket.to(a.assistant._id).emit('updateWaitingUser', waitingUsers)
+                })
+                // socket.emit('updateWaitingUser', waitingUsers)
                 console.log(waitingUsers.length, 'number of user after disconnect')
             })
         })
