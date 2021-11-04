@@ -16,7 +16,7 @@ export const connectSocket = (server) => {
         const io = new Server(httpServer, { allowEIO3: true })
 
         io.on('connection', socket => {
-            console.log(waitingUsers.length, ' number of waiting users from forceDC')
+            console.log(waitingUsers.length, ' number of waiting users connection')
             socket.on('newUser', async (payload) => {
 
 
@@ -84,6 +84,7 @@ export const connectSocket = (server) => {
             socket.on('forceUserDisconnect', () => {
                
                 dcUser(waitingUsers, socket)
+                dcUser(assistants, socket)
                 assistants.forEach(a => {
                     console.log(assistants.length, 'Number of online assistants')
                     socket.to(a.assistant._id).emit('updateWaitingUser', waitingUsers)
@@ -93,11 +94,12 @@ export const connectSocket = (server) => {
             })
             socket.on("disconnect", () => {
                 dcUser(waitingUsers, socket)
+                dcUser(assistants, socket)
                 assistants.forEach(a => {
                     console.log(assistants.length, 'Number of online assistants')
                     socket.to(a.assistant._id).emit('updateWaitingUser', waitingUsers)
                 })
-                console.log(waitingUsers.length, 'number of user after disconnect')
+                console.log(assistants.length, 'number of Asistants after disconnect')
             })
         })
     } catch (error) {
