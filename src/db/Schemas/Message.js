@@ -8,7 +8,7 @@ const MessageSchema = new Schema(
         senderRole: { type: String, enum: ['assistant', 'user'], default: 'user' },
         roomID:  { type: Schema.Types.ObjectId, ref: "Rooms", required: true },
         text:  { type: String },
-        files: [{ type: String }],
+        files: { type: String },
     },{
         timestamps : true
     }
