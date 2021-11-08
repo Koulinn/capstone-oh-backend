@@ -18,7 +18,7 @@ export const googleStrategy = new GoogleStrategy(
           const user = await UserModel.findOne({ email: profile._json.email })
           if (user) {
             const tokens = await generateTokens(user)
-            passportNext(null, { tokens })
+            passportNext(null, { user,tokens, })
           } else {
             const newUser = {
               name: profile._json.given_name,
@@ -26,7 +26,7 @@ export const googleStrategy = new GoogleStrategy(
               email: profile._json.email,
               avatar: profile._json.picture || ('https://ui-avatars.com/api/?name=' + profile._json.given_name) ,
               googleId: profile.id,
-              phone_primary: '7895144568'
+              phone_primary: 'false'
             }
     
             const createdUser = new UserModel(newUser)
@@ -34,7 +34,7 @@ export const googleStrategy = new GoogleStrategy(
             const savedUser = await createdUser.save()
             const tokens = await generateTokens(savedUser)
     
-            passportNext(null, { tokens })
+            passportNext(null, { tokens, user:savedUser })
           }
         } catch (error) {
           passportNext(error)

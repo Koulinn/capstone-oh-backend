@@ -7,6 +7,8 @@ import { sendMedicalRequestEmail } from '../../../lib/email/index.js';
 import queryToMongo from 'query-to-mongo'
 
 
+const BASE_URL = process.env.FE_DEV_TRUST_URL || FE_PROD_TRUST_URL || FE_PROD_TRUST_URL_2
+
 
 const { tools } = lib
 
@@ -58,6 +60,7 @@ const updateMe = async (req, res, next) => {
   try {
     const userID = req.user._id
     const user = await UserModel.findByIdAndUpdate(userID, req.body, { new: true })
+    .populate('medical_tests_requested')
     if (user) {
       res.status(200).send({ success: true, user })
     } else {
@@ -113,7 +116,12 @@ const refreshLogin = async (req, res, next) => {
 
 const OauthRedirect = async (req, res, next) => {
   try {
-    res.redirect(`http://localhost:3000/dashboard?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
+    const {phone_primary} = req.user.user
+    if(phone_primary !== 'false'){
+      res.redirect(`${BASE_URL}/dashboard?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
+    } else {
+      res.redirect(`${BASE_URL}/registrationOAuth?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
+    }
   } catch (error) {
     next(error)
   }
