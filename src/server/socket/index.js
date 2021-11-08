@@ -99,7 +99,7 @@ export const connectSocket = (server) => {
                     console.log(assistants.length, 'Number of online assistants')
                     socket.to(a.assistant._id).emit('updateWaitingUser', waitingUsers)
                 })
-                console.log(assistants.length, 'number of Asistants after disconnect')
+                console.log(assistants.length, 'number of Assistants after disconnect')
             })
         })
     } catch (error) {

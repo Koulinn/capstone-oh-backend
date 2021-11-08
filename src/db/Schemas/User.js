@@ -37,7 +37,7 @@ const UserSchema = new Schema(
             post_code: { type: String },
             city: { type: String }
         },
-        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequests" }],
+        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequests", required:true }],
         rooms: [{ type: Schema.Types.ObjectId, ref: "Rooms"}]
     },
     { timestamps: true }
