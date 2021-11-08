@@ -3,11 +3,13 @@ import passport from 'passport'
 import UserModel from '../../../db/Schemas/User.js'
 import { generateTokens } from '../jwt-aux.js'
 
+const BACKEND_URL = process.env.PROD_BACKEND_URL
+
 
 const googleStrategyConfig = {
     clientID: process.env.GOOGLE_API_OAUTH_ID,
     clientSecret: process.env.GOOGLE_API_SECRET_KEY,
-    callbackURL: process.env.BE_URL + process.env.PORT + '/user/googleOauth',
+    callbackURL: ( BACKEND_URL ||(process.env.BE_URL + process.env.PORT)) + '/user/googleOauth',
 }
 
 export const googleStrategy = new GoogleStrategy(
