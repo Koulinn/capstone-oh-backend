@@ -7,7 +7,7 @@ import { sendMedicalRequestEmail } from '../../../lib/email/index.js';
 import queryToMongo from 'query-to-mongo'
 
 
-const BASE_URL = process.env.FE_DEV_TRUST_URL || FE_PROD_TRUST_URL || FE_PROD_TRUST_URL_2
+const BASE_URL = process.env.FE_DEV_TRUST_URL || process.env.FE_PROD_TRUST_URL || process.env.FE_PROD_TRUST_URL_2
 
 
 const { tools } = lib
