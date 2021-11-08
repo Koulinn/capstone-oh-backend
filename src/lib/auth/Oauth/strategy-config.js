@@ -3,7 +3,7 @@ import passport from 'passport'
 import UserModel from '../../../db/Schemas/User.js'
 import { generateTokens } from '../jwt-aux.js'
 
-const BACKEND_URL_PROD = process.env.PROD_BACKEND_URL + process.env.PORT
+const BACKEND_URL_PROD = process.env.PROD_BACKEND_URL
 const BACKEND_URL_DEV = process.env.BE_URL + process.env.PORT
 
 const CALL_BACK_URL =  process.env.NODE_ENV === 'production'? BACKEND_URL_PROD : BACKEND_URL_DEV
