@@ -37,7 +37,8 @@ const UserSchema = new Schema(
             post_code: { type: String },
             city: { type: String }
         },
-        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequests" }],
+        medical_tests_requested: [{ type: Schema.Types.ObjectId, ref: "MedicalRequests", required:true }],
+        rooms: [{ type: Schema.Types.ObjectId, ref: "Rooms"}]
     },
     { timestamps: true }
 );
@@ -58,8 +59,7 @@ UserSchema.statics.checkCredentials = async function (email, password) {
 }
 
 UserSchema.pre("save", async function (next) {
-    this.avatar = `https://ui-avatars.com/api/?name=${this.name}`;
-
+    
     if (this.isModified("password")) {
         this.password = await bcrypt.hash(this.password, 12)
     }

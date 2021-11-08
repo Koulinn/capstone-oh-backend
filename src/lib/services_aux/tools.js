@@ -56,14 +56,19 @@ const isLoggedUser = async (req, res, next) => {
             const token = req.headers.authorization.replace("Bearer ", "")
             const decodedToken = await verifyJWT(token)
             const user = await UserModel.findById(decodedToken._id)
-            req.user = user
-            req.registeredUser = true
-        }
+            if(user){
+                req.user = user
+                req.registeredUser = true
+                next()
+            } else{
+                res.createError(404, 'No token provided')
+                next()
+            }
 
-        next()
+        } 
 
     } catch (error) {
-        next(error)
+        next(createHttpError(401, "Token not valid!"))
     }
 
 }

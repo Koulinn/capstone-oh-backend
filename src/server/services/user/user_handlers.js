@@ -7,6 +7,8 @@ import { sendMedicalRequestEmail } from '../../../lib/email/index.js';
 import queryToMongo from 'query-to-mongo'
 
 
+const BASE_URL = process.env.FE_DEV_TRUST_URL || FE_PROD_TRUST_URL || FE_PROD_TRUST_URL_2
+
 
 const { tools } = lib
 
@@ -16,11 +18,12 @@ const create = async (req, res, next) => {
     // req.body.age = {}
     // req.body.age.age_years = years
     // req.body.age.age_months = months
+    req.body.avatar = `https://ui-avatars.com/api/?name=${req.body.name}+${req.body.surname}`
 
     const newUser = new UserModel(req.body)
     const savedUser = await newUser.save({ new: true })
-    const { accessToken, newRefreshToken } = await generateTokens(savedUser)
-    res.status(201).send({ success: true, accessToken, newRefreshToken })
+    const { accessToken, refreshToken } = await generateTokens(savedUser)
+    res.status(201).send({ success: true, accessToken, refreshToken })
 
   } catch (error) {
     next(error)
@@ -57,6 +60,7 @@ const updateMe = async (req, res, next) => {
   try {
     const userID = req.user._id
     const user = await UserModel.findByIdAndUpdate(userID, req.body, { new: true })
+    .populate('medical_tests_requested')
     if (user) {
       res.status(200).send({ success: true, user })
     } else {
@@ -69,9 +73,8 @@ const updateMe = async (req, res, next) => {
 const uploadAvatar = async (req, res, next) => {
   try {
     const avatarUrl = req.file.path
-    console.log(avatarUrl)
     const userID = req.user._id
-    const user = await UserModel.findByIdAndUpdate(userID, { avatar: avatarUrl }, { new: true })
+    const user = await UserModel.findByIdAndUpdate(userID, { avatar: avatarUrl }, { projection: {avatar: 1, _id: 0}, new: true })
     if (user) {
       res.status(200).send({ success: true, user })
     } else {
@@ -113,7 +116,12 @@ const refreshLogin = async (req, res, next) => {
 
 const OauthRedirect = async (req, res, next) => {
   try {
-    res.redirect(`http://localhost:3000/dashboard?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
+    const {phone_primary} = req.user.user
+    if(phone_primary !== 'false'){
+      res.redirect(`${BASE_URL}/dashboard?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
+    } else {
+      res.redirect(`${BASE_URL}/registrationOAuth?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
+    }
   } catch (error) {
     next(error)
   }

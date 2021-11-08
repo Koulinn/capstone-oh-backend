@@ -7,6 +7,7 @@ const AssistantModel = new Schema(
         name: { type: String, required: true },
         role: { type: String, default: 'assistant' },
         avatar: { type: String },
+        rooms: [{ type: Schema.Types.ObjectId, ref: "Rooms"}]
     },{
         timestamps : true
     }

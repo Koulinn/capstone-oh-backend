@@ -5,7 +5,7 @@ import UserModel from '../../db/Schemas/User.js'
 export const generateTokens = async (user) => {
   const accessToken = await generateJWT({ _id: user._id })
   const refreshToken = await generateRefreshedJWT({ _id: user._id })
-  console.log(refreshToken, 'from generateTokens')
+  
 
   user.refreshToken = refreshToken
   await user.save()
