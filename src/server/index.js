@@ -1,7 +1,7 @@
 import lib from "../lib/index.js"
 import cors from "cors"
 import server from '../index.js'
-import connectToDB from '../DB/conn/index.js'
+import connectToDB from '../db/Conn/index.js'
 import passport from "passport"
 import { createServer } from 'http';
 import express  from "express"
