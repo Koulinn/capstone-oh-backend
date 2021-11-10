@@ -12,7 +12,7 @@ import fileExtension from 'file-extension'
 
 
 
-const emailBaseText = 'OneHealth Received your request, our assistants will get in touch in 1-3 working days to confirm the protocol '
+const emailBaseText = 'OneHealth Received your request, our assistants will get in touch in 2 working days to confirm the protocol '
 
 const apiKey = `SG.${process.env.SENDGRID_API_KEY}`
 sgMail.setApiKey(apiKey)
@@ -59,7 +59,7 @@ export const sendMedicalRequestEmail = async (user, request) => {
         const test = await Promise.all(medicalRequestAttachment)
     
         const msg = {
-            to: 'vetamigofloripa@gmail.com',
+            to: user.email,
             from: process.env.SENDGRID_EMAIL,
             subject: `New Medical request protocol: ${requestID}`,
             text: emailText,
