@@ -16,7 +16,7 @@ export const generateTokens = async (user) => {
 
 const generateRefreshedJWT = (payload) =>
   new Promise((resolve, reject) =>
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" }, (err, token) => {
       if (err) reject(err)
       resolve(token)
     })
@@ -24,7 +24,7 @@ const generateRefreshedJWT = (payload) =>
 
 const generateJWT = payload =>
   new Promise((resolve, reject) =>
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15s" }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" }, (err, token) => {
       if (err) reject(err)
       resolve(token)
     })
