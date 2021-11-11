@@ -130,18 +130,6 @@ const getUsers = async (req, res, next) => {
     next(error)
   }
 }
-const getUserData = async (req, res, next) => {
-  try {
-    
-    const users = await UserModel.find().select('name surname avatar email phone_primary createdAt _id')
-    .limit(5)
-    res.status(200).send({ success: true, users })
-
-  } catch (error) {
-    console.log(error)
-    next(error)
-  }
-}
 
 const hospital = {
   addNewTest: addNewTest,
@@ -151,7 +139,7 @@ const hospital = {
   getAssistant: getAssistant,
   searchTest: searchTest,
   getUnconfirmedMedicalRequests:getUnconfirmedMedicalRequests,
-  getUsers:getUsers
+  getUsers:getUsers,
 }
 
 export default hospital
