@@ -10,7 +10,7 @@ const {
   getAssistant,
   searchTest,
   getUnconfirmedMedicalRequests,
-  getUsers
+  getUsers,
 } = hospital
 
 
@@ -24,6 +24,9 @@ router
   .route("/medicalRequests")
   .get(getUnconfirmedMedicalRequests)
 router
+  .route("/medicalRequests/:requestID")
+  .put(confirmUserTests)
+router
   .route("/user")
   .get(getUsers)
 router
@@ -34,9 +37,6 @@ router
   .post(addAssistant)
   .get(getAssistant)
 
-router
-  .route("/:requestID")
-  .put(confirmUserTests)
 
 
 
