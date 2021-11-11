@@ -83,7 +83,7 @@ export const connectSocket = (server) => {
 
             socket.on('forceUserDisconnect', () => {
                
-                dcUser(waitingUsers, socket)
+                waitingUsers = waitingUsers.filter(u => u.socketID !== socket.id)
                 assistants = assistants.filter(a => a.socketID !== socket.id)
                 assistants.forEach(a => {
                     console.log(assistants.length, 'Number of online assistants')
@@ -93,8 +93,8 @@ export const connectSocket = (server) => {
 
             })
             socket.on("disconnect", () => {
-                dcUser(waitingUsers, socket)
                 assistants = assistants.filter(a => a.socketID !== socket.id)
+                waitingUsers = waitingUsers.filter(u => u.socketID !== socket.id)
                 assistants.forEach(a => {
                     console.log(assistants.length, 'Number of online assistants')
                     socket.to(a.assistant._id).emit('updateWaitingUser', waitingUsers)
