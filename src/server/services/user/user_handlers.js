@@ -145,7 +145,7 @@ const bookMedicalRequest = async (req, res, next) => {
     const newUserRequest = new Medical_Request(medicalRequestObj)
     const savedRequest = await newUserRequest.save({ new: true })
 
-    req.registeredUser ? await sendMedicalRequestEmail(req.user, savedRequest) : ''
+    await sendMedicalRequestEmail(req.user, savedRequest)
 
     res.status(201).send(savedRequest)
   } catch (error) {

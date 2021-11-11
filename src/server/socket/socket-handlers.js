@@ -44,15 +44,16 @@ const isExistentRoom = async(userID, assistantID)=>{
     }
 }
 
-const saveMessage = async (message, roomID) => {
-    const aux ={
-        ...message,
-        roomID
-    }
-    const newMessage = new MessageModel(aux)
-    const savedMessage = await newMessage.save()
-    RoomModel.findByIdAndUpdate(roomID, {$push:{chatHistory:savedMessage._id}})
-    return savedMessage
+const saveMessage = async (message, roomID) => { 
+        const aux ={
+            ...message,
+            roomID
+        }
+        const newMessage = new MessageModel(aux)
+        const savedMessage = await newMessage.save()
+        await RoomModel.findOneAndUpdate({UserID :roomID}, {$push:{chatHistory:savedMessage._id}}, {new: true})
+        return savedMessage
+   
 }
 
 const socketHandlers = {
