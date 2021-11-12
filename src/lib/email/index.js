@@ -19,7 +19,8 @@ sgMail.setApiKey(apiKey)
 
 export const createPDFOnDisk = async (user, request) => {
     const createSyncPipeline = promisify(pipeline)
-    const path = join(dirname(fileURLToPath(import.meta.url)), `./pdfs/${request._id}.pdf`)
+    // const path = join(dirname(fileURLToPath(import.meta.url)), `./pdfs/${request._id}.pdf`)
+    const path = `./pdfs/${request._id}.pdf`
     const pdfStream = await createPDFReadableStream(user, request)
     await createSyncPipeline(pdfStream, fs.createWriteStream(path))
     return path
