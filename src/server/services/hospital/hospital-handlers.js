@@ -122,7 +122,7 @@ const getUsers = async (req, res, next) => {
     }
 
     const users = await UserModel.find().select('name surname avatar email phone_primary createdAt _id')
-    .limit(5)
+    .limit(8)
     res.status(200).send({ success: true, users })
 
   } catch (error) {
