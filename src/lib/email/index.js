@@ -19,10 +19,7 @@ sgMail.setApiKey(apiKey)
 
 export const createPDFOnDisk = async (user, request) => {
     const createSyncPipeline = promisify(pipeline)
-    // const path = join(dirname(fileURLToPath(import.meta.url)), `./pdfs/${request._id}.pdf`)
-    console.log(fileURLToPath(import.meta.url), 'fileURLToPATH<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-    console.log(dirname(fileURLToPath(import.meta.url)), 'Dir name + fileURLToPATH<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-    const path = `./tmp/${request._id}.pdf`
+    const path = join(dirname(fileURLToPath(import.meta.url)), `./pdfs/${request._id}.pdf`)
     const pdfStream = await createPDFReadableStream(user, request)
     await createSyncPipeline(pdfStream, fs.createWriteStream(path))
     return path
@@ -54,8 +51,8 @@ export const sendMedicalRequestEmail = async (user, request) => {
     try {
         const requestID = request._id
         const emailText = `${emailBaseText} ${requestID}`
-        const pdfPath = await createPDFOnDisk(user, request)
-        const data = await pkg.base64Encode(pdfPath)
+        // const pdfPath = await createPDFOnDisk(user, request)
+        // const data = await pkg.base64Encode(pdfPath)
 
 
         const medicalRequestAttachment = await createRequestAttachments(request)
@@ -68,13 +65,13 @@ export const sendMedicalRequestEmail = async (user, request) => {
             text: emailText,
             html: emailText,
             attachments: [
-                {
-                    content: data.toString('base64'),
-                    filename: `MedicalRequestConfirmation.pdf`,
-                    type: 'application/pdf',
-                    disposition: 'attachment',
-                    content_id: `${user._id}`,
-                },
+                // {
+                //     content: data.toString('base64'),
+                //     filename: `MedicalRequestConfirmation.pdf`,
+                //     type: 'application/pdf',
+                //     disposition: 'attachment',
+                //     content_id: `${user._id}`,
+                // },
                 ...test
             ]
         }
