@@ -32,7 +32,7 @@ const saveRoom = async(userID, assistantID)=>{
   
     await UserModel.findByIdAndUpdate(userID, {$push:{rooms: savedRoom._id}})
     await AssistantModel.findByIdAndUpdate(assistantID, {$push:{rooms: savedRoom._id}})
-    return savedRoom._id
+    return userID.toString()
 }
 
 const isExistentRoom = async(userID, assistantID)=>{
