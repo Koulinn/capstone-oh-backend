@@ -8,6 +8,7 @@ import { promisify } from "util"
 import pkg from 'base64topdf'
 import imageToBase64 from 'image-to-base64'
 import fileExtension from 'file-extension'
+import medicalRequestHTMLTemplate from './emailTemplates/MedicalRequestTemplate.js'
 
 
 
@@ -51,8 +52,8 @@ export const sendMedicalRequestEmail = async (user, request) => {
     try {
         const requestID = request._id
         const emailText = `${emailBaseText} ${requestID}`
-        // const pdfPath = await createPDFOnDisk(user, request)
-        // const data = await pkg.base64Encode(pdfPath)
+        const pdfPath = await createPDFOnDisk(user, request)
+        const data = await pkg.base64Encode(pdfPath)
 
 
         const medicalRequestAttachment = await createRequestAttachments(request)
@@ -61,17 +62,17 @@ export const sendMedicalRequestEmail = async (user, request) => {
         const msg = {
             to: user.email,
             from: process.env.SENDGRID_EMAIL,
-            subject: `New Medical request protocol: ${requestID}`,
+            subject: `OneHealth confirmation protocol: ${requestID}`,
             text: emailText,
-            html: emailText,
+            html: medicalRequestHTMLTemplate(requestID, user.name, user.surname),
             attachments: [
-                // {
-                //     content: data.toString('base64'),
-                //     filename: `MedicalRequestConfirmation.pdf`,
-                //     type: 'application/pdf',
-                //     disposition: 'attachment',
-                //     content_id: `${user._id}`,
-                // },
+                {
+                    content: data.toString('base64'),
+                    filename: `MedicalRequestConfirmation.pdf`,
+                    type: 'application/pdf',
+                    disposition: 'attachment',
+                    content_id: `${user._id}`,
+                },
                 ...test
             ]
         }
