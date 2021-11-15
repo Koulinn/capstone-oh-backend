@@ -95,9 +95,6 @@ const getAssistant = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   try {
 
-    //data
-    //medicalRequest
-    console.log(req.query)
     if(req.query.medicalRequest){
       const userID = req.query.medicalRequest
       const requests = await MedicalRequestModel.find({userID: userID})
@@ -123,6 +120,7 @@ const getUsers = async (req, res, next) => {
 
     const users = await UserModel.find().select('name surname avatar email phone_primary createdAt _id')
     .limit(8)
+    .sort('-createdAt')
     res.status(200).send({ success: true, users })
 
   } catch (error) {
