@@ -16,7 +16,7 @@ This project is based in a UX Research case Study that I did in 2020 and publish
 Due to the pandemic tha Brazilian Healthcare system needed to improve and adapt to the new necessities imposed by the pandemic.
 
 <br>
-Link to demo: <a href="(https://capstone-oh-front.vercel.app/">OneHealth</a>
+Link to demo: <a href="https://capstone-oh-front.vercel.app/">OneHealth</a>
 
 <br>
 
