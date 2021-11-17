@@ -52,8 +52,8 @@ export const sendMedicalRequestEmail = async (user, request) => {
     try {
         const requestID = request._id
         const emailText = `${emailBaseText} ${requestID}`
-        const pdfPath = await createPDFOnDisk(user, request)
-        const data = await pkg.base64Encode(pdfPath)
+        // const pdfPath = await createPDFOnDisk(user, request)
+        // const data = await pkg.base64Encode(pdfPath)
 
 
         const medicalRequestAttachment = await createRequestAttachments(request)
@@ -66,13 +66,13 @@ export const sendMedicalRequestEmail = async (user, request) => {
             text: emailText,
             html: medicalRequestHTMLTemplate(requestID, user.name, user.surname),
             attachments: [
-                {
-                    content: data.toString('base64'),
-                    filename: `MedicalRequestConfirmation.pdf`,
-                    type: 'application/pdf',
-                    disposition: 'attachment',
-                    content_id: `${user._id}`,
-                },
+                // {
+                //     content: data.toString('base64'),
+                //     filename: `MedicalRequestConfirmation.pdf`,
+                //     type: 'application/pdf',
+                //     disposition: 'attachment',
+                //     content_id: `${user._id}`,
+                // },
                 ...test
             ]
         }
