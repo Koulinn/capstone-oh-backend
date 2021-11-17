@@ -18,24 +18,24 @@ const router = express.Router()
 
 router
   .route("/")
-  .post(addNewTest)
+  // .post(addNewTest)
   .get(searchTest)
-router
-  .route("/medicalRequests")
-  .get(getUnconfirmedMedicalRequests)
-router
-  .route("/medicalRequests/:requestID")
-  .put(confirmUserTests)
-router
-  .route("/user")
-  .get(getUsers)
-router
-  .route("/addResult/:requestID")
-  .put(addResult)
-router
-  .route("/assistants")
-  .post(addAssistant)
-  .get(getAssistant)
+// router
+//   .route("/medicalRequests")
+//   .get(getUnconfirmedMedicalRequests)
+// router
+//   .route("/medicalRequests/:requestID")
+//   .put(confirmUserTests)
+// router
+//   .route("/user")
+//   .get(getUsers)
+// router
+//   .route("/addResult/:requestID")
+//   .put(addResult)
+// router
+//   .route("/assistants")
+//   .post(addAssistant)
+//   .get(getAssistant)
 
 
 
