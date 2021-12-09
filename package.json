@@ -1,57 +1,57 @@
 {
-  "name": "capstone-oh-backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "dependencies": {
-    "@sendgrid/mail": "^7.5.0",
-    "base64topdf": "^1.1.8",
-    "bcrypt": "^5.0.1",
-    "cloudinary": "^1.26.3",
-    "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
-    "express": "^4.17.1",
-    "express-validator": "^6.12.1",
-    "file-extension": "^4.0.5",
-    "fs-extra": "^10.0.0",
-    "get-complete-age": "^1.0.4",
-    "html-to-pdfmake": "^2.3.5",
-    "http-errors": "^1.8.0",
-    "image-data-uri": "^2.0.1",
-    "image-to-base64": "^2.2.0",
-    "jsdom": "^18.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.8",
-    "multer": "^1.4.3",
-    "multer-storage-cloudinary": "^4.0.0",
-    "passport": "^0.5.0",
-    "passport-google-oauth20": "^2.0.0",
-    "pdfmake": "^0.2.2",
-    "query-to-mongo": "^0.10.1",
-    "socket.io": "^4.3.1"
-  },
-  "scripts": {
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
-    "dev": "nodemon -r dotenv/config ./src/server/index.js",
-    "start": "node ./src/server/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Koulinn/capstone-oh-backend.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Koulinn/capstone-oh-backend/issues"
-  },
-  "homepage": "https://github.com/Koulinn/capstone-oh-backend#readme",
-  "devDependencies": {
-    "dotenv": "^10.0.0",
-    "jest": "^27.2.4",
-    "nodemon": "^2.0.13",
-    "supertest": "^6.1.6"
-  }
+    "name": "capstone-oh-backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "dependencies": {
+        "@sendgrid/mail": "^7.5.0",
+        "base64topdf": "^1.1.8",
+        "bcrypt": "^5.0.1",
+        "cloudinary": "^1.26.3",
+        "cors": "^2.8.5",
+        "cross-env": "^7.0.3",
+        "express": "^4.17.1",
+        "express-validator": "^6.12.1",
+        "file-extension": "^4.0.5",
+        "fs-extra": "^10.0.0",
+        "get-complete-age": "^1.0.4",
+        "html-to-pdfmake": "^2.3.5",
+        "http-errors": "^1.8.0",
+        "image-data-uri": "^2.0.1",
+        "image-to-base64": "^2.2.0",
+        "jsdom": "^18.0.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.0.8",
+        "multer": "^1.4.3",
+        "multer-storage-cloudinary": "^4.0.0",
+        "passport": "^0.5.0",
+        "passport-google-oauth20": "^2.0.0",
+        "pdfmake": "^0.2.2",
+        "query-to-mongo": "^0.10.1",
+        "socket.io": "^4.3.1"
+    },
+    "scripts": {
+        "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+        "watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
+        "dev": "nodemon -r dotenv/config ./src/server/index.js",
+        "start": "node ./src/server/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Koulinn/capstone-oh-backend.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Koulinn/capstone-oh-backend/issues"
+    },
+    "homepage": "https://github.com/Koulinn/capstone-oh-backend#readme",
+    "devDependencies": {
+        "dotenv": "^10.0.0",
+        "jest": "^27.2.4",
+        "nodemon": "^2.0.13",
+        "supertest": "^6.1.6"
+    }
 }
